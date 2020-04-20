@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnSave, btnGetAllData;
+    private Button btnSave, btnGetAllData, btnTransision;
     private EditText editName, editPunchSpeed, editPunchPower, editKickSpeed, editKickPower;
     private TextView textGetData;
     private String allKickBoxer;
@@ -32,6 +32,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
         btnSave = findViewById(R.id.btnSave);
         btnGetAllData = findViewById(R.id.btnGetAllData);
+        btnTransision = findViewById(R.id.btnChangeActivity);
         editName = findViewById(R.id.editName);
         editPunchSpeed = findViewById(R.id.editPunchSpeed);
         editPunchPower = findViewById(R.id.editPunchPower);
@@ -61,8 +62,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         btnGetAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // inisialisasi
                 allKickBoxer = "";
                 ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("KickBoxer");
+
+                // objek ditampilkan ketika nilai punchPower lebih besar dari 100 "100 costume
+                queryAll.whereGreaterThan("punchPower", 100);
+
+                // untuk membatasi objek yang akan tampil
+                // queryAll.setLimit(1); -> hanya satu yang akan tampil
 
                 // untuk mendapat semua data
                 queryAll.findInBackground(new FindCallback<ParseObject>() {
@@ -90,15 +99,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
                 });
             }
         });
+
+        btnTransision.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
     @Override
     public void onClick(View v) {
 
+        // untuk mencegah kesalahan input
         try {
-
-
+            // membuat objeck "kickBoxer" dengan nama class "KickBoxer"
         final ParseObject kickBoxer = new ParseObject("KickBoxer");
         kickBoxer.put("nama", editName.getText().toString());
         kickBoxer.put("punchSpeed", Integer.parseInt(editPunchSpeed.getText().toString()));
@@ -109,6 +125,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         kickBoxer.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+
+                // jika tidak ada yang error
                 if (e == null){
                     FancyToast.makeText(SignUp.this, kickBoxer.get("nama") + " is saved to server",
                             FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
@@ -121,7 +139,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
         } catch (Exception e){
             FancyToast.makeText(SignUp.this, e.getMessage(),
-                    FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                    FancyToast.LENGTH_LONG, FancyToast.ERROR,true).show();
         }
     }
 }
