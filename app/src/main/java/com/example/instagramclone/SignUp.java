@@ -78,6 +78,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
                         || editPassword.getText().toString().equals("")){
                     FancyToast.makeText(this, "Email, User Name, and Password is required",
                             FancyToast.LENGTH_LONG,FancyToast.WARNING,true).show();
+                    transitionToSicialMediaActivity();
 
                 } else {
                     final ParseUser appUser = new ParseUser();
@@ -93,7 +94,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
                             if (e == null){
                                 FancyToast.makeText(SignUp.this, appUser.get("username") + " SigUp is Succesfully",
                                         FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
-                                transitionToSicialMediaActivity();
                             } else {
                                 FancyToast.makeText(SignUp.this, e.getMessage(),
                                         FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
@@ -131,5 +131,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
     private void transitionToSicialMediaActivity(){
         Intent intent = new Intent(SignUp.this, SocialMediaActivity.class);
         startActivity(intent);
+
+        // mendestroy singup activity agar user tidak bisa kembali ke signup activity kecuali ketika logout
+        finish();
     }
 }
